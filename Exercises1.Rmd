@@ -1,0 +1,246 @@
+---
+title: "Exercise 1"
+author: "Takehiro Hashimoto"
+date: "`r Sys.Date()`"
+output:
+  md_document: default
+---
+<!--   pdf_document: default
+ md_document -->
+
+```{r, include=FALSE}
+options(tinytex.verbose = TRUE)
+options(dplyr.summarise.inform = FALSE)
+```
+
+```{r setup, include=FALSE}
+library(magrittr) # needs to be run every time you start R and want to use %>%
+library(dplyr)    # alternatively, this also loads %>%
+library(knitr)
+library(tidyverse) 
+library(ggplot2)
+library(reshape2)
+library(gapminder)
+library(mosaic)
+library(extraDistr)
+library(caret)
+library(modelr)
+library(parallel)
+library(foreach)
+library(rsample)  # for creating train/test splits
+load(file = "data.RData")
+```
+
+## 1) Data visualization: flights at ABIA
+
+### Question:
+
+**What is the best month to fly to minimize arriving delays, and does this change by airline?**
+
+### Graph 1:
+
+```{r P1a, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+scale=0.1
+data = ABIA %>% group_by(Month) %>% summarize(mean = round(mean(ArrDelay, na.rm=T),2), min=round(min(ArrDelay, na.rm=T),2), max=round(max(ArrDelay, na.rm=T),2))
+rdata = data %>% mutate(MonthStr = month.abb[Month])
+
+ggplot(rdata, aes(Month))+geom_line(aes(y=mean))+ggtitle("G1-1: The mean of minutes of arrival delays by months")+theme(plot.title = element_text(hjust = 0.5))+scale_x_continuous(breaks=seq(1, 12, 1), limits=c(1,12))
+```
+
+```{r P1b, echo=FALSE,fig.width =5.5, fig.height = 2,fig.align='center'}
+scale=0.1
+ggplot(rdata, aes(Month),width=20)+geom_line(aes(y=max), color = "tomato")+geom_line(aes(y=min/scale), color = "steelblue")+scale_y_continuous("red line: Max", sec.axis = sec_axis(~ . * scale, name = "blue line: Min") )+ggtitle("G1-2: The max and min of minutes of arrival delays by months")+theme(plot.title = element_text(hjust = 0.5))+scale_x_continuous(breaks=seq(1, 12, 1), limits=c(1,12))
+```
+
+### Comment on Graph 1:
+
+We can see from G1-1 of Graph 1 that the highest average of the arrival delays by month is December, and that on September, October and November are low compared to other months. Also, The G1-2 graph shows that the month of the highest arrival delay is December, and that of the lowest is May.
+
+### Discussion on Graph 1:
+
+So, from these results, we can estimate the following points. First, the number of arrival delays probably is caused by the number of passengers at ABIA. For example, a low number of arrival delays means fewer passengers. Therefore, from September to November, the number of passengers at ABIA might be lower than that of the other months. This is because students in Austin start their semesters and do not use the airport to go out of the city. In contrast, in December, the number of passengers will increase drastically; for example, they fly to their home countries and other cities in holidays.
+
+Focusing on the max and min of the number, we can easily understand why December has the highest number of arrival delays. However, we also need to consider why we can see the lowest number in May. So, I provide one of the reasons here: although airline companies offer a lot of airplanes to prepare students to go out of cities after graduation or the end of the semester, that did not happen by any reason.
+
+### Graph 2:
+
+```{r P2a, echo=FALSE,fig.width =5, fig.height = 10,fig.align='center'}
+scale=0.1
+data = ABIA %>% group_by(Month,UniqueCarrier) %>% summarize(mean = round(mean(ArrDelay, na.rm=T)))
+
+ggplot(data, aes(Month))+geom_line(aes(y=mean))+ggtitle("G2: The mean of minutes of arrival delays by months and airlines")+theme(plot.title = element_text(hjust = 0.5))+scale_x_continuous(breaks=seq(1, 12, 1), limits=c(1,12))+facet_wrap(~UniqueCarrier)
+```
+```{r P2b, echo=FALSE,fig.width =5, fig.height = 10,fig.align='center'}
+data = ABIA %>% group_by(Month,UniqueCarrier) %>% summarize(mean = round(mean(ArrDelay, na.rm=T))) %>% filter(Month==12)
+knitr::kable(head(data[order(data$mean, decreasing = FALSE), ]  ))
+knitr::kable(head(data[order(data$mean, decreasing = TRUE), ]  ))
+```
+
+This data includes 15 airline companies, which are Endeavor Air(9E), American Airlines(AA), JetBlue(B6), 	Continental Airlines(CO), Delta Air Lines(DL), ExpressJet(EV), Frontier Airlines(F9), American Eagle Airlines(MQ), Northwest Airlines(NW), PSA Airlines(OH), 	SkyWest Airlines(OO), United Airlines(UA), US Airways(US), Southwest Airlines(WN), JSX(XE), Mesa Airlines(YV).
+
+It is difficult for us to see the number of arriving delays all month to judge which airline is the best. So ,here, I focus on that of December because the number of arriving delays is highest on December.
+
+### Comment on Graph 2 and Tables:
+
+The Graph 2 shows that the number of arriving delays by months and airlines. The first table says its data by ascending order and the second table do it by decending order.
+
+The fluctiation of most of airlines looks like that of the average one except for some companies, such as EV and DL. The companies with low delays  on Decemberare JSX, United Airline and American Airline, and the companies with high delays on Decemberare PSA Airline, Express Jet and SkyWest Airlines.
+
+### Discussion on Graph 2:
+United Airlines and American Airlines are very famous and big companies with many planes and flight paths. So if some of the airplanes they have were delayed, they might have another way to avoid delays more than small companies. So, therefore, big firms were better if you wanted to avoid the uncertainty of arrival delays of your air in December.
+
+### Conclusion:
+If you want to avoid arrival delays of your air, especially in December when many delays happen, you should choose big firms like United Airlines and American Airlines.  
+
+\newpage
+
+## 2) Wrangling the Olympics
+
+### A) What is the 95th percentile of heights for female competitors across all Athletics events?
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+data = olympics_top20 %>% group_by(sport,sex) %>% filter(sport=="Athletics")%>% filter(sex=="F")
+quantile(data$height, 0.95)
+```
+
+From the result, the answer is **183**
+
+### B) Which single women's event had the greatest variability in competitor's heights across the entire history of the Olympics, as measured by the standard deviation?
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+data <- olympics_top20 %>% group_by(event,sex) %>% filter(sex=="F") %>% summarize(sd=sd(height))
+data=data[order(data$sd, decreasing = TRUE), ]
+data =select(.data=data, c("event","sd","sex"))
+knitr::kable(head(data))
+```
+
+Therefore, the answer is **Rowing Women's Coxed Fours**.
+
+### c) How has the average age of Olympic swimmers changed over time? Does the trend look different for male swimmers relative to female swimmers?
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+data <- olympics_top20 %>% group_by(year,sex) %>%  filter(sport=="Swimming") %>%summarize(average=mean(age))
+ggplot(data)+geom_line(aes(x=year, y=average, color=sex))+ggtitle("The average age of Olympic swimmers over time by sex")+theme(plot.title = element_text(hjust = 0.5))
+```
+
+From the above graph, the average age of Olympic swimmers has increased over time after 1925 for both males and females. The difference in the average age between males and females looks narrow recently compared to the past.
+
+\newpage
+
+## 3) K-nearest neighbors: cars
+
+
+### Steps
+We did this following steps to analyze K-nearest neighbors
+
+1. Made two dataset for each trim of 350 and 65 AMG
+
+<Run 10 times>
+2. Split the data into a training and a testing set with probability of 0.8 by each trim.
+3. Set K-nearest-neighbors with 2-100 values of K.
+4. For each value of K, Run regression of knnreg and fit the model training set to calculate the out-of-sample root mean-squared error (RMSE) for each value of K by each trim.
+<up to this>
+5. From the 10 times average of RMSE, we get the optimal value of K by each trim
+6. we predict the model with the optimal K.
+
+### Results of Step 2-5
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+
+data1 <- sclass %>% group_by(trim) %>% filter(trim=="350")
+data2 <- sclass %>% group_by(trim) %>% filter(trim=="65 AMG")
+
+# Maxk: 1- up to X
+maxK=100
+
+#data1: 350
+rmse_cv1 =   foreach(K = 2:maxK, .combine='rbind') %do% {
+  foreach(i=1:10, .combine='rbind')%do% {
+# 1. Split the data into training and testing
+  data1_split =  initial_split(data1, prop=0.8)
+  data1_train = training(data1_split)
+  data1_test  = testing(data1_split)
+# 2. Knn regress price on mileage with k=1-20(maxK)
+  knn1 = knnreg(price ~ mileage, data=data1_train, k=K)
+# 3. Calculate rmse
+  c(km=K,rmse=modelr::rmse(knn1,data=data1_test))
+  }
+}%>% as.data.frame
+
+ggplot(rmse_cv1,aes(x=factor(km), y=rmse))+geom_boxplot()
+
+
+#data2: AWG
+rmse_cv2 =   foreach(K = 2:maxK, .combine='rbind') %do% {
+  foreach(i=1:10, .combine='rbind')%do% {
+# 1. Split the data into training and testing
+  data2_split =  initial_split(data2, prop=0.8)
+  data2_train = training(data2_split)
+  data2_test  = testing(data2_split)
+# 2. Knn regress price on mileage with k=1-20(maxK)
+  knn2 = knnreg(price ~ mileage, data=data2_train, k=K)
+# 3. Calculate rmse
+  c(km=K,rmse=modelr::rmse(knn2,data=data2_test))
+  }
+}%>% as.data.frame
+
+#ggplot(rmse_cv2,aes(x=factor(km), y=rmse))+geom_boxplot()
+
+datat1 <- rmse_cv1 %>% group_by(km)%>% summarize(c350=mean(rmse))
+datat2 <- rmse_cv2 %>% group_by(km)%>% summarize(cawg=mean(rmse))
+data <- full_join(datat1, datat2, by="km")
+
+ggplot(data , aes(km))+geom_line(aes(y=c350), color = "tomato")+ggtitle("RMSE/K of 350")+theme(plot.title = element_text(hjust = 0.5))
+ggplot(data , aes(km))+geom_line(aes(y=cawg), color = "steelblue")+ggtitle("RMSE/K of 63 AMG")+theme(plot.title = element_text(hjust = 0.5))
+```
+
+From the result of these graphs, we can see that the optimal K of the 350 is 60, and the optimal K of the 63 AMG is 18.
+
+### Result of 6: The fitted model of the 350
+
+The plot of the fitted model of the 350 k = 60 is the following.
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+data1 <- sclass %>% group_by(trim) %>% filter(trim=="350")
+
+data1_split =  initial_split(data1, prop=0.8)
+data1_train = training(data1_split)
+data1_test  = testing(data1_split)
+
+# KNN with K = 60
+knn60 = knnreg(price ~ mileage, data=data1, k=60)
+
+# attach the predictions to the test data frame
+data1_test = data1_test %>%
+  mutate(price_pred1 = predict(knn60, data1_test))
+
+p_test = ggplot(data = data1_test) + 
+  geom_point(mapping = aes(x = mileage, y = price), alpha=0.2)
+# now add the predictions
+p_test + geom_line(aes(x = mileage, y = price_pred1), color='red', size=1.5)
+```
+
+### Result of 6: The fitted model of the 63 AMG
+
+The plot of the fitted model of the 350 at k = 18 is the following.
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+data2 <- sclass %>% group_by(trim) %>% filter(trim=="350")
+
+data2_split =  initial_split(data2, prop=0.8)
+data2_train = training(data1_split)
+data2_test  = testing(data1_split)
+
+# KNN with K = 18
+knn18 = knnreg(price ~ mileage, data=data2, k=18)
+
+# attach the predictions to the test data frame
+data2_test = data2_test %>%
+  mutate(price_pred2 = predict(knn18, data2_test))
+
+p_test = ggplot(data = data2_test) + 
+  geom_point(mapping = aes(x = mileage, y = price), alpha=0.2) 
+# now add the predictions
+p_test + geom_line(aes(x = mileage, y = price_pred2), color='red', size=1.5)
+```
+
+### Which trim yields a larger optimal value of K? Why do you think this is?
+The optimal value of k of 350 is larger than that of 63 AMG. This is because...  
