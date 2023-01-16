@@ -236,15 +236,19 @@ the past.
 
 We did this following steps to analyze K-nearest neighbors
 
-1.  Made two dataset for each trim of 350 and 65 AMG
+-   1.  Made two dataset for each trim of 350 and 65 AMG
 
-&lt;Run 10 times&gt; 2. Split the data into a training and a testing set
-with probability of 0.8 by each trim. 3. Set K-nearest-neighbors with
-2-100 values of K. 4. For each value of K, Run regression of knnreg and
-fit the model training set to calculate the out-of-sample root
-mean-squared error (RMSE) for each value of K by each trim. <up to this>
-5. From the 10 times average of RMSE, we get the optimal value of K by
-each trim 6. we predict the model with the optimal K.
+&lt;Run 10 times&gt; - 2. Split the data into a training and a testing
+set with probability of 0.8 by each trim. - 3. Set K-nearest-neighbors
+with 2-100 values of K. - 4. For each value of K, Run regression of
+knnreg and fit the model training set to calculate the out-of-sample
+root mean-squared error (RMSE) for each value of K by each trim.
+<up to this>
+
+-   1.  From the 10 times average of RMSE, we get the optimal value of K
+        by each trim
+
+-   1.  we predict the model with the optimal K.
 
 ### Results of Step 2-5
 
