@@ -120,6 +120,11 @@ Therefore, the answer is **Rowing Women's Coxed Fours**.
 ### c) How has the average age of Olympic swimmers changed over time? Does the trend look different for male swimmers relative to female swimmers?
 
 ```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+data <- olympics_top20 %>% group_by(year) %>%  filter(sport=="Swimming") %>%summarize(average=mean(age))
+ggplot(data)+geom_line(aes(x=year, y=average))+ggtitle("The average age of Olympic swimmers over time")+theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
 data <- olympics_top20 %>% group_by(year,sex) %>%  filter(sport=="Swimming") %>%summarize(average=mean(age))
 ggplot(data)+geom_line(aes(x=year, y=average, color=sex))+ggtitle("The average age of Olympic swimmers over time by sex")+theme(plot.title = element_text(hjust = 0.5))
 ```

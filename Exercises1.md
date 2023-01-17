@@ -225,6 +225,8 @@ Therefore, the answer is **Rowing Women’s Coxed Fours**.
 
 <img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
 
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+
 From the above graph, the average age of Olympic swimmers has increased
 over time after 1925 for both males and females. The difference in the
 average age between males and females looks narrow recently compared to
@@ -252,7 +254,7 @@ root mean-squared error (RMSE) for each value of K by each trim.
 
 ### Results of Step 2-5
 
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /><img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-5-2.png" style="display: block; margin: auto;" /><img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-5-3.png" style="display: block; margin: auto;" />
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /><img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-6-2.png" style="display: block; margin: auto;" /><img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-6-3.png" style="display: block; margin: auto;" />
 
 From the result of these graphs, we can see that the optimal K of the
 350 is 60, and the optimal K of the 63 AMG is 18.
@@ -260,12 +262,12 @@ From the result of these graphs, we can see that the optimal K of the
 ### Result of 6: The fitted model of the 350
 
 The plot of the fitted model of the 350 k = 60 is the following.
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 ### Result of 6: The fitted model of the 63 AMG
 
 The plot of the fitted model of the 350 at k = 18 is the following.
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
 ### Which trim yields a larger optimal value of K? Why do you think this is?
 
