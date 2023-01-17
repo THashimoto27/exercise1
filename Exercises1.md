@@ -171,9 +171,9 @@ Airlines and American Airlines.
 ### A) What is the 95th percentile of heights for female competitors across all Athletics events?
 
     ## 95% 
-    ## 183
+    ## 186
 
-From the result, the answer is **183**
+From the result, the answer is **186**
 
 ### B) Which single women’s event had the greatest variability in competitor’s heights across the entire history of the Olympics, as measured by the standard deviation?
 

@@ -1,9 +1,9 @@
 ---
 title: "Exercise 1"
-author: "Takehiro Hashimoto"
+author: ""
 date: "`r Sys.Date()`"
 output:
-  pdf_document: default
+  md_document
  
 ---
 <!--   pdf_document: default
@@ -100,11 +100,11 @@ If you want to avoid arrival delays of your air, especially in December when man
 ### A) What is the 95th percentile of heights for female competitors across all Athletics events?
 
 ```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
-data = olympics_top20 %>% group_by(sport,sex) %>% filter(sport=="Athletics")%>% filter(sex=="F")
+data = olympics_top20 %>% group_by(sport,sex) %>% filter(sex=="F")
 quantile(data$height, 0.95)
 ```
 
-From the result, the answer is **183**
+From the result, the answer is **186**
 
 ### B) Which single women's event had the greatest variability in competitor's heights across the entire history of the Olympics, as measured by the standard deviation?
 
