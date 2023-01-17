@@ -1,4 +1,4 @@
-# exercise
+# Readme: Exercise 1
 
 The difference between my way and the original instruction
 
@@ -23,11 +23,14 @@ The difference between my way and the original instruction
  ### Why?
  My steps calculate the 10-times average of the data split with the probability of 0.8 that is shown in the slide(intro-learning "Measuring model accuracy, revisited")
  
- # The way of prediction
+ # 2. The way of prediction
  The instruction says that we need to make predition while going to calculate K-nearest neighbors at the same time.
  But I did find the opitmal calculate of K at the first, and then made prediction with its K.
  I will ask TA on it.
  
- # 3. The part of "Which trim yields a larger optimal value of K? Why do you think this is?"
+ # 3. K-fold cross validation
+ I did not use K-fold cross validation because this prompt of the problem looks like it was not requried. But this is just my impression and might be not correct. I will ask TA about it.
+ 
+ # 4. The part of "Which trim yields a larger optimal value of K? Why do you think this is?"
  I haven't finished answering this question because I have no any idea! Please tell me your idea
 
