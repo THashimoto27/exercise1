@@ -254,28 +254,38 @@ minimization of K in 1-200 - 5. Plot the prediction of the optimal K
 
 <img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
 
-Therefore, in this way to analyze, the optimal K is 18. So, we show the
-plot of the prediction in the following.
+From the above result, the optimal K is 18 because of the minimum RMSE
+on it. The prediction is in the following.
 
 <img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 #### K-CV
 
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /><img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-8-2.png" style="display: block; margin: auto;" />
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+From the above result, the optimal K is 13 because of the minimum RMSE
+on it. The prediction is in the following.
+
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
 #### Trim: 65 AMG
 
 #### Split the data into a training and a testing set with the probability 0.8
 
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
-
-Therefore, the optimal K is 56 in this case.
-
 <img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+
+From the above result, the optimal K is 56 because of the minimum RMSE
+on it. The prediction is in the following.
+
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
 
 #### K-fold
 
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /><img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-11-2.png" style="display: block; margin: auto;" />
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
+
+From the above result, the optimal K is 51 because of the minimum RMSE
+on it. The prediction is in the following.
+
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
 
 ### Which trim yields a larger optimal value of K? Why do you think this is?
 
