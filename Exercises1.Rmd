@@ -169,7 +169,7 @@ data2 = data2 %>%
 ## pipeline 2
 data1_folds = crossv_kfold(data1, k=K_folds)
 ## 1. find optimal K
-data1_cv_grid = foreach(k = 1:200, .combine='rbind') %dopar% {
+data1_cv_grid = foreach(k = 1:200, .combine='rbind') %do% {
   models1 = map(data1_folds$train, ~ knnreg(price ~ mileage, k=k, data = ., use.all=FALSE))
   errs1 = map2_dbl(models1, data1_folds$test, modelr::rmse)
   c(k=k, err = mean(errs1), std_err = sd(errs1)/sqrt(K_folds))
@@ -204,7 +204,7 @@ ggplot(data = predict1) + geom_point(mapping = aes(x = mileage, y = y), alpha=0.
 ## pipeline 2
 data2_folds = crossv_kfold(data2, k=K_folds)
 ## 1. find optimal K
-data2_cv_grid = foreach(k = 1:200, .combine='rbind') %dopar% {
+data2_cv_grid = foreach(k = 1:200, .combine='rbind') %do% {
   models2 = map(data2_folds$train, ~ knnreg(price ~ mileage, k=k, data = ., use.all=FALSE))
   errs2 = map2_dbl(models2, data2_folds$test, modelr::rmse)
   c(k=k, err = mean(errs2), std_err = sd(errs2)/sqrt(K_folds))

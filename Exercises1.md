@@ -254,8 +254,6 @@ with K-fold cross validation
 
 #### Trim: 350
 
-    ## Warning: executing %dopar% sequentially: no parallel backend registered
-
 <img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
 
 <table>
