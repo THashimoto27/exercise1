@@ -236,40 +236,77 @@ the past.
 
 ### Steps
 
-We did this following steps to analyze K-nearest neighbors
+We did this following steps to get optimal K and prediction of price
+with K-fold cross validation
 
 -   1.  Made two dataset for each trim of 350 and 65 AMG
 
-&lt;Run 10 times&gt; - 2. Split the data into a training and a testing
-set with probability of 0.8 by each trim. - 3. Set K-nearest-neighbors
-with 2-100 values of K. - 4. For each value of K, Run regression of
-knnreg and fit the model training set to calculate the out-of-sample
-root mean-squared error (RMSE) for each value of K by each trim.
-<up to this>
+-   1.  Split the data into a training and a testing set with 5 Folds
+        randomly.
 
--   1.  From the 10 times average of RMSE, we get the optimal value of K
-        by each trim
+-   1.  Get RMSE and Prediction of price on mileage.
 
--   1.  we predict the model with the optimal K.
+-   1.  Find the value of RMSE to minimization of K in 1-200
 
-### Results of Step 2-5
+-   1.  Plot the prediction of the optimal K
 
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /><img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-6-2.png" style="display: block; margin: auto;" /><img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-6-3.png" style="display: block; margin: auto;" />
+### Results
 
-From the result of these graphs, we can see that the optimal K of the
-350 is 60, and the optimal K of the 63 AMG is 18.
+#### Trim: 350
 
-### Result of 6: The fitted model of the 350
+    ## Warning: executing %dopar% sequentially: no parallel backend registered
 
-The plot of the fitted model of the 350 k = 60 is the following.
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">k</th>
+<th style="text-align: right;">err</th>
+<th style="text-align: right;">std_err</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">result.14</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">10026.15</td>
+<td style="text-align: right;">361.2921</td>
+</tr>
+</tbody>
+</table>
+
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-6-2.png" style="display: block; margin: auto;" />
+
+#### Trim: 63 AMG
+
 <img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
-### Result of 6: The fitted model of the 63 AMG
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">k</th>
+<th style="text-align: right;">err</th>
+<th style="text-align: right;">std_err</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">result.56</td>
+<td style="text-align: right;">56</td>
+<td style="text-align: right;">14375.89</td>
+<td style="text-align: right;">568.9283</td>
+</tr>
+</tbody>
+</table>
 
-The plot of the fitted model of the 350 at k = 18 is the following.
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-7-2.png" style="display: block; margin: auto;" />
 
 ### Which trim yields a larger optimal value of K? Why do you think this is?
 
-The optimal value of k of 350 is larger than that of 63 AMG. This is
-because…
+The optimal value of k of 63 AMG is larger than that of 350. Because the
+number of observations for 350 is 416, which is smaller than that or
+observations for 63 AMG. That means the larger number of observation
+need larger K to balance between its Bias and Variance.
