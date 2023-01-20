@@ -137,9 +137,10 @@ From the above graph, the average age of Olympic swimmers has increased over tim
 
 
 ### Steps
-We did this following steps to get optimal K and prediction of price with K-fold cross validation
+We did this following steps to get optimal K and prediction of price with 2 ways, spilitting the data with 0.8 probabilities and K-fold cross validation
 
-- 1. Made two dataset for each trim of 350 and 65 AMG
+Especially, the steps of the K-fold is in the following
+- 1. Made two datasets for each trim of 350 and 65 AMG
 - 2. Split the data into a training and a testing set with 5 Folds randomly.
 - 3. Get RMSE and Prediction of price on mileage.
 - 4. Find the value of RMSE to minimization of K in 1-200
@@ -149,26 +150,48 @@ We did this following steps to get optimal K and prediction of price with K-fold
 
 #### Trim: 350
 
+#### Split the data into a training and a testing set with the probability 0.8
 ```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
-
 data1 <- sclass %>% group_by(trim) %>% filter(trim=="350")
-data2 <- sclass %>% group_by(trim) %>% filter(trim=="63 AMG")
-
-K_folds = 5
-
 # Maxk: 1- up to X
 maxK=200
+
+#
+rmse_350 = foreach(K = 2:maxK, .combine='rbind') %do% {
+data350_split = initial_split(data1, prop=0.8)
+ data350_train = training(data350_split)
+ data350_test = testing(data350_split)
+knn1 = knnreg(price ~ mileage, data=data350_train, k=K)
+c(k=K,rmse=modelr::rmse(knn1,data=data350_test))
+}%>% as.data.frame
+
+# make a plot of RMSE versus K, so that we can see where it bottoms out.
+ggplot(rmse_350, aes(k))+geom_line(aes(y=rmse), color = "tomato")+ggtitle("RMSE/K of 
+350")+theme(plot.title = element_text(hjust = 0.5))
+#knitr::kable(rmse_350[rmse_350$rmse==min(rmse_350$rmse),])
+```
+
+Therefore, in this way to analyze, the optimal K is 18. So, we show the plot of the prediction in the following.
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+knn18 = knnreg(price ~ mileage, data=data1, k=18)
+data350_test = data350_test %>%
+ mutate(price_pred1 = predict(knn18, data350_test))
+p_test = ggplot(data = data350_test) + 
+ geom_point(mapping = aes(x = mileage, y = price), alpha=0.2)
+p_test + geom_line(aes(x = mileage, y = price_pred1), color='red', size=1.5)
+```
+
+#### K-CV
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+## K-CV
+K_folds = 5
 data1 = data1 %>%
   mutate(fold_id1 = rep(1:K_folds, length=nrow(data1)) %>% sample)
-
-data2 = data2 %>%
-  mutate(fold_id2 = rep(1:K_folds, length=nrow(data2)) %>% sample)
-
-
-# data1: 350
-## pipeline 2
 data1_folds = crossv_kfold(data1, k=K_folds)
-## 1. find optimal K
+
+### 1. find optimal K
 data1_cv_grid = foreach(k = 1:200, .combine='rbind') %do% {
   models1 = map(data1_folds$train, ~ knnreg(price ~ mileage, k=k, data = ., use.all=FALSE))
   errs1 = map2_dbl(models1, data1_folds$test, modelr::rmse)
@@ -176,9 +199,9 @@ data1_cv_grid = foreach(k = 1:200, .combine='rbind') %do% {
 } %>% as.data.frame
 
 ggplot(data1_cv_grid ,aes(x=k, y=err))+geom_line()
-knitr::kable(data1_cv_grid[data1_cv_grid$err==min(data1_cv_grid$err),])
+#knitr::kable(data1_cv_grid[data1_cv_grid$err==min(data1_cv_grid$err),])
 
-## 2. prediction
+### 2. prediction
 optimal_k=13
 x=data.frame()
 y=data.frame()
@@ -196,23 +219,58 @@ ggplot(data = predict1) + geom_point(mapping = aes(x = mileage, y = y), alpha=0.
 ```
 
 
-#### Trim: 63 AMG
+#### Trim: 65 AMG
+
+#### Split the data into a training and a testing set with the probability 0.8
 
 ```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+data2 <- sclass %>% group_by(trim) %>% filter(trim=="65 AMG")
 
+#Run K-nearest-neighbors, for many different values of K, starting at K=2 and going as high as you need to. For each value of K, fit the model to the training set and make predictions on your test set.
+
+rmse_AMG = foreach(K = 2:maxK, .combine='rbind') %do% {
+dataAMG_split = initial_split(data2, prop=0.8)
+ dataAMG_train = training(dataAMG_split)
+ dataAMG_test = testing(dataAMG_split)
+knn1 = knnreg(price ~ mileage, data=dataAMG_train, k=K)
+c(k=K,rmse=modelr::rmse(knn1,data=dataAMG_test))
+}%>% as.data.frame
+
+ggplot(rmse_AMG, aes(k))+geom_line(aes(y=rmse), color = "tomato")+ggtitle("RMSE/K of 65 
+AMG")+theme(plot.title = element_text(hjust = 0.5))
+
+#knitr::kable(rmse_AMG[rmse_AMG$rmse==min(rmse_AMG$rmse),])
+```
+
+Therefore, the optimal K is 56 in this case.
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+# Then for the optimal value of K, show a plot of the fitted model, i.e. predictions vs. x. 
+knn56 = knnreg(price ~ mileage, data=data2, k=56)
+dataAMG_test = dataAMG_test %>%
+ mutate(price_pred2 = predict(knn56, dataAMG_test))
+p_test = ggplot(data = dataAMG_test) + 
+ geom_point(mapping = aes(x = mileage, y = price), alpha=0.2)
+p_test + geom_line(aes(x = mileage, y = price_pred2), color='red', size=1.5)
+```
+
+#### K-fold
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
 #data2: AWG
-## pipeline 2
+### K-CV
+data2 = data2 %>%
+  mutate(fold_id2 = rep(1:K_folds, length=nrow(data2)) %>% sample)
 data2_folds = crossv_kfold(data2, k=K_folds)
-## 1. find optimal K
+### 1. find optimal K
 data2_cv_grid = foreach(k = 1:200, .combine='rbind') %do% {
   models2 = map(data2_folds$train, ~ knnreg(price ~ mileage, k=k, data = ., use.all=FALSE))
   errs2 = map2_dbl(models2, data2_folds$test, modelr::rmse)
   c(k=k, err = mean(errs2), std_err = sd(errs2)/sqrt(K_folds))
 } %>% as.data.frame
 ggplot(data2_cv_grid ,aes(x=k, y=err))+geom_line()
-knitr::kable(data2_cv_grid[data2_cv_grid$err==min(data2_cv_grid$err),])
+#knitr::kable(data2_cv_grid[data2_cv_grid$err==min(data2_cv_grid$err),])
 
-## 2. prediction
+### 2. prediction
 optimal_k=51
 x=data.frame()
 y=data.frame()

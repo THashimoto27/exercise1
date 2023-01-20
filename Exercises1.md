@@ -237,70 +237,45 @@ the past.
 ### Steps
 
 We did this following steps to get optimal K and prediction of price
-with K-fold cross validation
+with 2 ways, spilitting the data with 0.8 probabilities and K-fold cross
+validation
 
--   1.  Made two dataset for each trim of 350 and 65 AMG
-
--   1.  Split the data into a training and a testing set with 5 Folds
-        randomly.
-
--   1.  Get RMSE and Prediction of price on mileage.
-
--   1.  Find the value of RMSE to minimization of K in 1-200
-
--   1.  Plot the prediction of the optimal K
+Especially, the steps of the K-fold is in the following - 1. Made two
+datasets for each trim of 350 and 65 AMG - 2. Split the data into a
+training and a testing set with 5 Folds randomly. - 3. Get RMSE and
+Prediction of price on mileage. - 4. Find the value of RMSE to
+minimization of K in 1-200 - 5. Plot the prediction of the optimal K
 
 ### Results
 
 #### Trim: 350
 
+#### Split the data into a training and a testing set with the probability 0.8
+
 <img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
 
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;"></th>
-<th style="text-align: right;">k</th>
-<th style="text-align: right;">err</th>
-<th style="text-align: right;">std_err</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">result.14</td>
-<td style="text-align: right;">14</td>
-<td style="text-align: right;">10026.15</td>
-<td style="text-align: right;">361.2921</td>
-</tr>
-</tbody>
-</table>
-
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-6-2.png" style="display: block; margin: auto;" />
-
-#### Trim: 63 AMG
+Therefore, in this way to analyze, the optimal K is 18. So, we show the
+plot of the prediction in the following.
 
 <img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;"></th>
-<th style="text-align: right;">k</th>
-<th style="text-align: right;">err</th>
-<th style="text-align: right;">std_err</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">result.56</td>
-<td style="text-align: right;">56</td>
-<td style="text-align: right;">14375.89</td>
-<td style="text-align: right;">568.9283</td>
-</tr>
-</tbody>
-</table>
+#### K-CV
 
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-7-2.png" style="display: block; margin: auto;" />
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /><img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-8-2.png" style="display: block; margin: auto;" />
+
+#### Trim: 65 AMG
+
+#### Split the data into a training and a testing set with the probability 0.8
+
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+
+Therefore, the optimal K is 56 in this case.
+
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+
+#### K-fold
+
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /><img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-11-2.png" style="display: block; margin: auto;" />
 
 ### Which trim yields a larger optimal value of K? Why do you think this is?
 
