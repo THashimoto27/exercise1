@@ -69,14 +69,14 @@ From both the graphs, we can observe that the lowest average of both the arrival
 We could have looked at different scenarios for this justification, like there could have been delays prior to coming at Austin due to various possible reasons. But as both the arrival and departure delays occur almost at the same time, therefore we may conclude that the passenger traffic is at maximum around 5am. This may be due to the fact that more people try to arrive in Austin very early in the morning to start their day afresh and also they try to depart early after finishing their day’s work. This may be also due to the fact that the weather in Austin is more clear during the day till midnight.
 
 ### Graph3:
-```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+```{r, echo=FALSE,fig.align='center'}
 scale=0.1
 data = ABIA %>% group_by(ArrTime, UniqueCarrier) %>% summarize(mean = mean(ArrDelay, na.rm=T))
 ggplot(data)+geom_line(aes(x = ArrTime, y = mean))+ggtitle("The mean of minutes of arrival delays by Arrival Time")+facet_wrap(~UniqueCarrier)
 ```
 
 ### Graph 4:
-```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+```{r, echo=FALSE,fig.align='center'}
 scale=0.1
 data = ABIA %>% group_by(DepTime, UniqueCarrier) %>% summarize(mean = mean(DepDelay, na.rm=T))
 ggplot(data)+geom_line(aes(x = DepTime, y = mean))+ggtitle("The mean of minutes of departure delays by Departure Time")+facet_wrap(~UniqueCarrier)
