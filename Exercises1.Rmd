@@ -426,6 +426,6 @@ knitr::include_graphics("./graphs/8.png")
 
 ### Which trim yields a larger optimal value of K? Why do you think this is?
 
-The optimal value of k of 350 is larger than that of 65 AMG. Because the number of observations for 350 is 416, which is larger than that or observations for 65 AMG (which is 292). That means the larger number of observation need larger K to balance between its Bias and Variance.
-
+The optimal value of k of 350 is larger than that of 65 AMG. This is because the number of observations for 350 is 416, which is larger than that of observations for 65 AMG (which is 292). It implies that the larger number of observation needs larger K to balance between its bias and variance. If the sample size is large, for large k values, we have more data points and narrow range of values leading to less bias. Therefore, we choose large optimal k value when sample size is large.
+On the other hand, when the sample size is low, we use low optimal k value because of the lower bias compared to large k values.  At small sample size, the bias for large k value is high & the lower variance that comes with large k-values cannot offset the higher bias. So in the case of small sample size, compared to large k values, the low k value minimizes the rmse. 
 Note that when we used the K-fold method to the optimal value of k by each trim, the difference of them was smaller.
