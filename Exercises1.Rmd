@@ -429,4 +429,3 @@ knitr::include_graphics("./graphs/8.png")
 The optimal value of k of 350 is larger than that of 65 AMG. Because the number of observations for 350 is 416, which is larger than that or observations for 65 AMG (which is 292). That means the larger number of observation need larger K to balance between its Bias and Variance.
 
 Note that when we used the K-fold method to the optimal value of k by each trim, the difference of them was smaller.
-
