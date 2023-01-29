@@ -235,7 +235,8 @@ data <- olympics_top20 %>% group_by(year,sex) %>%  filter(sport=="Swimming") %>%
 ggplot(data)+geom_line(aes(x=year, y=average, color=sex))+ggtitle("The average age of Olympic swimmers over time by sex")+theme(plot.title = element_text(hjust = 0.5))
 ```
 
-From the above graph, the average age of Olympic swimmers has increased over time after 1925 for both males and females. The difference in the average age between males and females looks narrow recently compared to the past.
+From the above graph, the average age of Olympic swimmers has increased over time after 1925 for both males and females. The average age for male swimmers has always been higher than the average age of female swimmers since 1900. However, the difference in the average age between males and females has become narrow recently compared to the past.
+
 
 \newpage
 
