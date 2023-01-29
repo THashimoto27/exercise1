@@ -252,44 +252,112 @@ minimization of K in 1-200 - 5. Plot the prediction of the optimal K
 
 #### Split the data into a training and a testing set with the probability 0.8
 
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+<img src="./graphs/1.png" style="display: block; margin: auto;" />
 
-From the above result, the optimal K is 18 because of the minimum RMSE
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">min_k=84</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">min_rmse=7432.471</td>
+</tr>
+</tbody>
+</table>
+
+From the above result, the optimal K is 84 because of the minimum RMSE
 on it. The prediction is in the following.
 
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+<img src="./graphs/2.png" style="display: block; margin: auto;" />
 
 #### K-CV
 
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
-From the above result, the optimal K is 13 because of the minimum RMSE
+<img src="./graphs/3.png" style="display: block; margin: auto;" />
+
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">min_k=15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">min_err=9971.221</td>
+</tr>
+</tbody>
+</table>
+
+From the above result, the optimal K is 15 because of the minimum RMSE
 on it. The prediction is in the following.
 
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="./graphs/4.png" style="display: block; margin: auto;" />
 
 #### Trim: 65 AMG
 
 #### Split the data into a training and a testing set with the probability 0.8
 
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+<img src="./graphs/5.png" style="display: block; margin: auto;" />
 
-From the above result, the optimal K is 56 because of the minimum RMSE
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">min_k=17</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rmse=14255.92</td>
+</tr>
+</tbody>
+</table>
+
+From the above result, the optimal K is 17 because of the minimum RMSE
 on it. The prediction is in the following.
 
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+<img src="./graphs/6.png" style="display: block; margin: auto;" />
 
 #### K-fold
 
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
+<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /><img src="./graphs/7.png" style="display: block; margin: auto;" />
 
-From the above result, the optimal K is 51 because of the minimum RMSE
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">min_k=13</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">min_err=20717.91</td>
+</tr>
+</tbody>
+</table>
+
+From the above result, the optimal K is 13 because of the minimum RMSE
 on it. The prediction is in the following.
 
-<img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
+<img src="./graphs/8.png" style="display: block; margin: auto;" />
 
 ### Which trim yields a larger optimal value of K? Why do you think this is?
 
-The optimal value of k of 63 AMG is larger than that of 350. Because the
-number of observations for 350 is 416, which is smaller than that or
-observations for 63 AMG. That means the larger number of observation
-need larger K to balance between its Bias and Variance.
+The optimal value of k of 350 is larger than that of 65 AMG. Because the
+number of observations for 350 is 416, which is larger than that or
+observations for 65 AMG (which is 292). That means the larger number of
+observation need larger K to balance between its Bias and Variance.
+
+Note that when we used the K-fold method to the optimal value of k by
+each trim, the difference of them was smaller.
