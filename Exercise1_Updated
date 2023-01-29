@@ -1,0 +1,417 @@
+---
+title: "Exercise1"
+author: "Takehiro Hasimoto (UT EID ), Avijit Mallik (UT EID ), Arindam Chatterjee
+  (UT EID - AC83995)"
+date: "`r Sys.Date()`"
+output:
+  word_document: default
+  pdf_document: default
+---
+<!--   pdf_document: default
+ md_document -->
+
+```{r, include=FALSE}
+options(tinytex.verbose = TRUE)
+options(dplyr.summarise.inform = FALSE)
+```
+
+```{r setup, include=FALSE}
+library(magrittr) # needs to be run every time you start R and want to use %>%
+library(dplyr)    # alternatively, this also loads %>%
+library(knitr)
+library(tidyverse) 
+library(ggplot2)
+library(reshape2)
+library(gapminder)
+library(mosaic)
+library(extraDistr)
+library(caret)
+library(modelr)
+library(parallel)
+library(foreach)
+library(rsample)  # for creating train/test splits
+load(file = "data.RData")
+```
+
+## 1) Data visualization: flights at ABIA
+
+### Question :
+
+**Q.1.a. What is the best time of day to fly to minimize delays, and does this change by airline?**
+
+### Graph1:
+
+```{r P1a, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+scale=0.1
+data = ABIA %>% group_by(ArrTime) %>% summarize(mean = mean(ArrDelay, na.rm=T))
+
+ggplot(data)+geom_line(aes(x = ArrTime, y = mean))+ggtitle("The mean of minutes of arrival delays by Arrival Time")
+```
+
+### Graph2:
+```{r P1a, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+scale=0.1
+data = ABIA %>% group_by(DepTime) %>% summarize(mean = mean(DepDelay, na.rm=T))
+
+ggplot(data)+geom_line(aes(x = DepTime, y = mean))+ggtitle("The mean of minutes of departure delays by Departure Time")
+```
+
+### Comment on Graphs 1 & 2 :
+
+From both the graphs, we can observe that the lowest average of both the arrival and departure delays by arrival and departure time respectively are between 6am to 11pm and the highest average of both the arrival and departure delays are after 11pm and before 6am, with a peak around 5am.
+
+### Discussion on Graphs 1 & 2 :
+
+We could have looked at different scenarios for this justification, like there could have been delays prior to coming at Austin due to various possible reasons. But as both the arrival and departure delays occur almost at the same time, therefore we may conclude that the passenger traffic is at maximum around 5am. This may be due to the fact that more people try to arrive in Austin very early in the morning to start their day afresh and also they try to depart early after finishing their day’s work. This may be also due to the fact that the weather in Austin is more clear during the day till midnight.
+
+### Graph3:
+```{r P1a, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+scale=0.1
+data = ABIA %>% group_by(ArrTime, UniqueCarrier) %>% summarize(mean = mean(ArrDelay, na.rm=T))
+
+ggplot(data)+geom_line(aes(x = ArrTime, y = mean))+ggtitle("The mean of minutes of arrival delays by Arrival Time")+facet_wrap(~UniqueCarrier)
+```
+
+### Graph 4:
+```{r P1a, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+scale=0.1
+data = ABIA %>% group_by(DepTime, UniqueCarrier) %>% summarize(mean = mean(DepDelay, na.rm=T))
+
+ggplot(data)+geom_line(aes(x = DepTime, y = mean))+ggtitle("The mean of minutes of departure delays by Departure Time")+facet_wrap(~UniqueCarrier)
+```
+
+### Comments on Graphs 3 & 4:
+
+From both the graphs, we can observe that the lowest average of both the arrival and departure delays by arrival and departure time respectively are between 7am to 11pm and the highest average of both the arrival and departure delays are after 11pm and before 7am.
+
+### Discussion on Graphs 3 & 4 :
+
+Again, from both these graphs, what we can observe is that both the arrival and departure delays are minimum in between 7am till 11pm with occasional spikes of arrival and departure delays during the day. Maximum arrival and departure delays have occurred for Endeavor Air (code-9E) and Jet Blue (code-B6) respectively. We may like to correlate such delay with excess passenger traffic from midnight till early morning as Austin is becoming a tech/ industrial city. There is people’s urge to start their day by arriving early here and also depart after finishing a day’s work. The weather condition during daytime and nighttime can also be a factor for such arrival and departure delays. It may be a fact that the weather in Austin is more clear during the day till midnight.
+
+**Q.1.b.What is the best time of year to fly to minimize delays, and does this change by destination? (You'd probably want to focus on a handful of popular destinations.)**
+
+### Graph5:
+
+```{r P1a, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+scale=0.1
+data = ABIA %>% group_by(Month) %>% filter(Dest == "ATL") %>% summarise(mean = mean(ArrDelay, na.rm=T))
+
+ggplot(data)+geom_line(aes(x=Month, y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For Atlanta")
+```
+
+### Graph6:
+```{r P1a, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+scale=0.1
+data = ABIA %>% group_by(Month) %>% filter(Dest == "LAX") %>%                            summarise(mean = mean(ArrDelay, na.rm=T))
+
+ggplot(data)+geom_line(aes(x=Month, y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For Log Angeles")
+```
+
+### Graph7:
+```{r P1a, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+scale=0.1
+data = ABIA %>% group_by(Month) %>% filter(Dest == "ORD") %>% summarise(mean = mean(ArrDelay, na.rm=T))
+
+ggplot(data)+geom_line(aes(x=Month, y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For Chicago")
+```
+
+### Graph8:
+```{r P1a, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+scale=0.1
+data = ABIA %>% group_by(Month) %>% filter(Dest == "DFW") %>% summarise(mean = mean(ArrDelay, na.rm=T))
+
+ggplot(data)+geom_line(aes(x=Month, y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For Dallas")
+```
+
+### Graph9:
+```{r P1a, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+scale=0.1
+data = ABIA %>% group_by(Month) %>% filter(Dest == "DEN") %>% summarise(mean = mean(ArrDelay, na.rm=T))
+
+ggplot(data)+geom_line(aes(x=Month, y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For Denver")
+```
+
+### Graph10:
+```{r P1a, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+scale=0.1
+data = ABIA %>% group_by(Month) %>% filter(Dest == "JFK") %>% summarise(mean = mean(ArrDelay, na.rm=T))
+
+ggplot(data)+geom_line(aes(x=Month, y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For New York")
+```
+
+### Comments on Graphs 5 to 10:
+Now from these graphs, we can easily observe that the minimum delays have occurred during the months of September to November, with a low trend of delay occuring during May of each year. 
+
+### Discussion on Graphs 5 to 10:
+As per question requirement, I have selected top six airports by passenger traffic (source - https://www.world-airport-codes.com/us-top-40-airports.html). Here we have noticed that the minimum delays have occurred during the months of September to November, with a low trend of delay occuring during May of each year. It can be due to the fact that the airlines try to provide the best service during the holiday period to attract the maximum passengers and increase their service ratings. It can also occur due to the weather conditions which is at its best during the summer (May) and Autumn (September to November).
+
+
+
+##Q.1.c) 
+
+### Question:
+
+**What is the best month to fly to minimize arriving delays, and does this change by airline?**
+
+### Graph 11:
+
+```{r P1a, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+scale=0.1
+data = ABIA %>% group_by(Month) %>% summarize(mean = round(mean(ArrDelay, na.rm=T),2), min=round(min(ArrDelay, na.rm=T),2), max=round(max(ArrDelay, na.rm=T),2))
+rdata = data %>% mutate(MonthStr = month.abb[Month])
+
+ggplot(rdata, aes(Month))+geom_line(aes(y=mean))+ggtitle("G1-1: The mean of minutes of arrival delays by months")+theme(plot.title = element_text(hjust = 0.5))+scale_x_continuous(breaks=seq(1, 12, 1), limits=c(1,12))
+```
+
+```{r P1b, echo=FALSE,fig.width =5.5, fig.height = 2,fig.align='center'}
+scale=0.1
+ggplot(rdata, aes(Month),width=20)+geom_line(aes(y=max), color = "tomato")+geom_line(aes(y=min/scale), color = "steelblue")+scale_y_continuous("red line: Max", sec.axis = sec_axis(~ . * scale, name = "blue line: Min") )+ggtitle("G1-2: The max and min of minutes of arrival delays by months")+theme(plot.title = element_text(hjust = 0.5))+scale_x_continuous(breaks=seq(1, 12, 1), limits=c(1,12))
+```
+
+### Comment on Graph 11:
+
+We can see from G1-1 of Graph 1 that the highest average of the arrival delays by month is December, and that on September, October and November are low compared to other months. Also, The G1-2 graph shows that the month of the highest arrival delay is December, and that of the lowest is May.
+
+### Discussion on Graph 11:
+
+So, from these results, we can estimate the following points. First, the number of arrival delays probably is caused by the number of passengers at ABIA. For example, a low number of arrival delays means fewer passengers. Therefore, from September to November, the number of passengers at ABIA might be lower than that of the other months. This is because students in Austin start their semesters and do not use the airport to go out of the city. In contrast, in December, the number of passengers will increase drastically; for example, they fly to their home countries and other cities in holidays.
+
+Focusing on the max and min of the number, we can easily understand why December has the highest number of arrival delays. However, we also need to consider why we can see the lowest number in May. So, I provide one of the reasons here: although airline companies offer a lot of airplanes to prepare students to go out of cities after graduation or the end of the semester, that did not happen by any reason.
+
+### Graph 12:
+
+```{r P2a, echo=FALSE,fig.width =5, fig.height = 10,fig.align='center'}
+scale=0.1
+data = ABIA %>% group_by(Month,UniqueCarrier) %>% summarize(mean = round(mean(ArrDelay, na.rm=T)))
+
+ggplot(data, aes(Month))+geom_line(aes(y=mean))+ggtitle("G2: The mean of minutes of arrival delays by months and airlines")+theme(plot.title = element_text(hjust = 0.5))+scale_x_continuous(breaks=seq(1, 12, 1), limits=c(1,12))+facet_wrap(~UniqueCarrier)
+```
+```{r P2b, echo=FALSE,fig.width =5, fig.height = 10,fig.align='center'}
+data = ABIA %>% group_by(Month,UniqueCarrier) %>% summarize(mean = round(mean(ArrDelay, na.rm=T))) %>% filter(Month==12)
+knitr::kable(head(data[order(data$mean, decreasing = FALSE), ]  ))
+knitr::kable(head(data[order(data$mean, decreasing = TRUE), ]  ))
+```
+
+This data includes 15 airline companies, which are Endeavor Air(9E), American Airlines(AA), JetBlue(B6), 	Continental Airlines(CO), Delta Air Lines(DL), ExpressJet(EV), Frontier Airlines(F9), American Eagle Airlines(MQ), Northwest Airlines(NW), PSA Airlines(OH), 	SkyWest Airlines(OO), United Airlines(UA), US Airways(US), Southwest Airlines(WN), JSX(XE), Mesa Airlines(YV).
+
+It is difficult for us to see the number of arriving delays all month to judge which airline is the best. So ,here, I focus on that of December because the number of arriving delays is highest on December.
+
+### Comment on Graph 12 and Tables:
+
+The Graph 2 shows that the number of arriving delays by months and airlines. The first table says its data by ascending order and the second table do it by decending order.
+
+The fluctiation of most of airlines looks like that of the average one except for some companies, such as EV and DL. The companies with low delays  on Decemberare JSX, United Airline and American Airline, and the companies with high delays on Decemberare PSA Airline, Express Jet and SkyWest Airlines.
+
+### Discussion on Graph 12:
+United Airlines and American Airlines are very famous and big companies with many planes and flight paths. So if some of the airplanes they have were delayed, they might have another way to avoid delays more than small companies. So, therefore, big firms were better if you wanted to avoid the uncertainty of arrival delays of your air in December.
+
+### Conclusion:
+If you want to avoid arrival delays of your air, especially in December when many delays happen, you should choose big firms like United Airlines and American Airlines.  
+
+\newpage
+
+## Q.2) Wrangling the Olympics
+
+### A) What is the 95th percentile of heights for female competitors across all Athletics events?
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+data = olympics_top20 %>% group_by(sex) %>% group_by(sport) %>% filter(sex=="F") %>% filter(sport=="Athletics")
+
+quantile(data$height, 0.95)
+
+```
+
+From the result, the answer is **183**
+
+### B) Which single women's event had the greatest variability in competitor's heights across the entire history of the Olympics, as measured by the standard deviation?
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+data <- olympics_top20 %>% group_by(event,sex) %>% filter(sex=="F") %>% summarize(sd=sd(height))
+data=data[order(data$sd, decreasing = TRUE), ]
+data =select(.data=data, c("event","sd","sex"))
+knitr::kable(head(data))
+```
+
+Therefore, the answer is **Rowing Women's Coxed Fours**.
+
+### c) How has the average age of Olympic swimmers changed over time? Does the trend look different for male swimmers relative to female swimmers?
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+data <- olympics_top20 %>% group_by(year) %>%  filter(sport=="Swimming") %>%summarize(average=mean(age))
+ggplot(data)+geom_line(aes(x=year, y=average))+ggtitle("The average age of Olympic swimmers over time")+theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+data <- olympics_top20 %>% group_by(year,sex) %>%  filter(sport=="Swimming") %>%summarize(average=mean(age))
+ggplot(data)+geom_line(aes(x=year, y=average, color=sex))+ggtitle("The average age of Olympic swimmers over time by sex")+theme(plot.title = element_text(hjust = 0.5))
+```
+
+From the above graph, the average age of Olympic swimmers has increased over time after 1925 for both males and females. The difference in the average age between males and females looks narrow recently compared to the past.
+
+\newpage
+
+## 3) K-nearest neighbors: cars
+
+
+### Steps
+We did this following steps to get optimal K and prediction of price with 2 ways, spilitting the data with 0.8 probabilities and K-fold cross validation
+
+Especially, the steps of the K-fold is in the following
+- 1. Made two datasets for each trim of 350 and 65 AMG
+- 2. Split the data into a training and a testing set with 5 Folds randomly.
+- 3. Get RMSE and Prediction of price on mileage.
+- 4. Find the value of RMSE to minimization of K in 1-200
+- 5. Plot the prediction of the optimal K
+
+### Results
+
+#### Trim: 350
+
+#### Split the data into a training and a testing set with the probability 0.8
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+data1 <- sclass %>% group_by(trim) %>% filter(trim=="350")
+# Maxk: 1- up to X
+maxK=200
+
+#
+rmse_350 = foreach(K = 2:maxK, .combine='rbind') %do% {
+data350_split = initial_split(data1, prop=0.8)
+ data350_train = training(data350_split)
+ data350_test = testing(data350_split)
+knn1 = knnreg(price ~ mileage, data=data350_train, k=K)
+c(k=K,rmse=modelr::rmse(knn1,data=data350_test))
+}%>% as.data.frame
+
+# make a plot of RMSE versus K, so that we can see where it bottoms out.
+ggplot(rmse_350, aes(k))+geom_line(aes(y=rmse), color = "tomato")+ggtitle("RMSE/K of 
+350")+theme(plot.title = element_text(hjust = 0.5))
+#knitr::kable(rmse_350[rmse_350$rmse==min(rmse_350$rmse),])
+```
+
+From the above result, the optimal K is 18 because of the minimum RMSE on it. The prediction is in the following.
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+knn18 = knnreg(price ~ mileage, data=data1, k=18)
+data350_test = data350_test %>%
+ mutate(price_pred1 = predict(knn18, data350_test))
+p_test = ggplot(data = data350_test) + 
+ geom_point(mapping = aes(x = mileage, y = price), alpha=0.2)
+p_test + geom_line(aes(x = mileage, y = price_pred1), color='red', size=1.5)
+```
+
+#### K-CV
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+## K-CV
+K_folds = 5
+data1 = data1 %>%
+  mutate(fold_id1 = rep(1:K_folds, length=nrow(data1)) %>% sample)
+data1_folds = crossv_kfold(data1, k=K_folds)
+
+### 1. find optimal K
+data1_cv_grid = foreach(k = 1:200, .combine='rbind') %do% {
+  models1 = map(data1_folds$train, ~ knnreg(price ~ mileage, k=k, data = ., use.all=FALSE))
+  errs1 = map2_dbl(models1, data1_folds$test, modelr::rmse)
+  c(k=k, err = mean(errs1), std_err = sd(errs1)/sqrt(K_folds))
+} %>% as.data.frame
+
+ggplot(data1_cv_grid ,aes(x=k, y=err))+geom_line()
+#knitr::kable(data1_cv_grid[data1_cv_grid$err==min(data1_cv_grid$err),])
+```
+From the above result, the optimal K is 13 because of the minimum RMSE on it. The prediction is in the following.
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+### 2. prediction
+optimal_k=13
+x=data.frame()
+y=data.frame()
+yhat=data.frame()
+for(fold in 1:K_folds) {
+  knn1 = knnreg(price ~ mileage, data=filter(data1, fold_id1 != fold), k=optimal_k)
+  x <- rbind(filter(data1, fold_id1 == fold)[,"mileage"],x)
+  y <- rbind(filter(data1, fold_id1 == fold)[,"price"],y)
+  yhat <- rbind(as.data.frame(predict(knn1,filter(data1, fold_id1 == fold))),yhat)
+}
+
+predict1 = data.frame(c(x,y,yhat))
+colnames(predict1) <- c("mileage", "y","yhat")
+ggplot(data = predict1) + geom_point(mapping = aes(x = mileage, y = y), alpha=0.2)+ geom_line(aes(x = mileage, y = yhat), color='red', size=1.5)
+```
+
+
+#### Trim: 65 AMG
+
+#### Split the data into a training and a testing set with the probability 0.8
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+data2 <- sclass %>% group_by(trim) %>% filter(trim=="65 AMG")
+
+#Run K-nearest-neighbors, for many different values of K, starting at K=2 and going as high as you need to. For each value of K, fit the model to the training set and make predictions on your test set.
+
+rmse_AMG = foreach(K = 2:maxK, .combine='rbind') %do% {
+dataAMG_split = initial_split(data2, prop=0.8)
+ dataAMG_train = training(dataAMG_split)
+ dataAMG_test = testing(dataAMG_split)
+knn1 = knnreg(price ~ mileage, data=dataAMG_train, k=K)
+c(k=K,rmse=modelr::rmse(knn1,data=dataAMG_test))
+}%>% as.data.frame
+
+ggplot(rmse_AMG, aes(k))+geom_line(aes(y=rmse), color = "tomato")+ggtitle("RMSE/K of 65 
+AMG")+theme(plot.title = element_text(hjust = 0.5))
+
+#knitr::kable(rmse_AMG[rmse_AMG$rmse==min(rmse_AMG$rmse),])
+```
+
+From the above result, the optimal K is 56 because of the minimum RMSE on it. The prediction is in the following.
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+# Then for the optimal value of K, show a plot of the fitted model, i.e. predictions vs. x. 
+knn56 = knnreg(price ~ mileage, data=data2, k=56)
+dataAMG_test = dataAMG_test %>%
+ mutate(price_pred2 = predict(knn56, dataAMG_test))
+p_test = ggplot(data = dataAMG_test) + 
+ geom_point(mapping = aes(x = mileage, y = price), alpha=0.2)
+p_test + geom_line(aes(x = mileage, y = price_pred2), color='red', size=1.5)
+```
+
+#### K-fold
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+#data2: AWG
+### K-CV
+data2 = data2 %>%
+  mutate(fold_id2 = rep(1:K_folds, length=nrow(data2)) %>% sample)
+data2_folds = crossv_kfold(data2, k=K_folds)
+### 1. find optimal K
+data2_cv_grid = foreach(k = 1:200, .combine='rbind') %do% {
+  models2 = map(data2_folds$train, ~ knnreg(price ~ mileage, k=k, data = ., use.all=FALSE))
+  errs2 = map2_dbl(models2, data2_folds$test, modelr::rmse)
+  c(k=k, err = mean(errs2), std_err = sd(errs2)/sqrt(K_folds))
+} %>% as.data.frame
+ggplot(data2_cv_grid ,aes(x=k, y=err))+geom_line()
+#knitr::kable(data2_cv_grid[data2_cv_grid$err==min(data2_cv_grid$err),])
+```
+
+From the above result, the optimal K is 51 because of the minimum RMSE on it. The prediction is in the following.
+
+```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
+### 2. prediction
+optimal_k=51
+x=data.frame()
+y=data.frame()
+yhat=data.frame()
+for(fold in 1:K_folds) {
+  knn2 = knnreg(price ~ mileage, data=filter(data2, fold_id2 != fold), k=optimal_k)
+  x <- rbind(filter(data2, fold_id2 == fold)[,"mileage"],x)
+  y <- rbind(filter(data2, fold_id2 == fold)[,"price"],y)
+  yhat <- rbind(as.data.frame(predict(knn2,filter(data2, fold_id2 == fold))),yhat)
+}
+
+predict2 = data.frame(c(x,y,yhat))
+colnames(predict2) <- c("mileage", "y","yhat")
+ggplot(data = predict2) + geom_point(mapping = aes(x = mileage, y = y), alpha=0.2)+ geom_line(aes(x = mileage, y = yhat), color='red', size=1.5)
+```
+
+### Which trim yields a larger optimal value of K? Why do you think this is?
+
+The optimal value of k of 63 AMG is larger than that of 350. Because the number of observations for 350 is 416, which is smaller than that or observations for 63 AMG. That means the larger number of observation need larger K to balance between its Bias and Variance. 
+
