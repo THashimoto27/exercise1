@@ -410,12 +410,12 @@ on it. The prediction is in the following.
 <td style="text-align: left;">min_k=15</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">min_err=9971.221</td>
+<td style="text-align: left;">min_err=9845.729</td>
 </tr>
 </tbody>
 </table>
 
-From the above result, the optimal K is 13 because of the minimum RMSE
+From the above result, the optimal K is 15 because of the minimum RMSE
 on it. The prediction is in the following.
 
 <img src="./graphs/4.png" width="70%" height="70%" style="display: block; margin: auto;" />
@@ -437,12 +437,12 @@ on it. The prediction is in the following.
 <td style="text-align: left;">min_k=17</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">rmse=14255.92</td>
+<td style="text-align: left;">rmse=10805.82</td>
 </tr>
 </tbody>
 </table>
 
-From the above result, the optimal K is 56 because of the minimum RMSE
+From the above result, the optimal K is 17 because of the minimum RMSE
 on it. The prediction is in the following.
 
 <img src="./graphs/6.png" width="70%" height="70%" style="display: block; margin: auto;" />
@@ -462,12 +462,12 @@ on it. The prediction is in the following.
 <td style="text-align: left;">min_k=13</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">min_err=20717.91</td>
+<td style="text-align: left;">min_err=20462.65</td>
 </tr>
 </tbody>
 </table>
 
-From the above result, the optimal K is 51 because of the minimum RMSE
+From the above result, the optimal K is 13 because of the minimum RMSE
 on it. The prediction is in the following.
 
 <img src="./graphs/8.png" width="70%" height="70%" style="display: block; margin: auto;" />
@@ -486,5 +486,4 @@ because of the lower bias compared to large k values. At small sample
 size, the bias for large k value is high & the lower variance that comes
 with large k-values cannot offset the higher bias. So in the case of
 small sample size, compared to large k values, the low k value minimizes
-the rmse. Note that when we used the K-fold method to the optimal value
-of k by each trim, the difference of them was smaller.
+the rmse.
