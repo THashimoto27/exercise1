@@ -92,47 +92,54 @@ Again, from both these graphs, what we can observe is that both the arrival and 
 
 **Q.1.b.What is the best time of year to fly to minimize delays, and does this change by destination? (You'd probably want to focus on a handful of popular destinations.)**
 
+
 ### Graph5:
 
 ```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
 scale=0.1
-data = ABIA %>% group_by(Month) %>% filter(Dest == "ATL") %>% summarise(mean = mean(ArrDelay, na.rm=T))
-ggplot(data)+geom_line(aes(x=Month, y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For Atlanta")
+data = ABIA %>% group_by(Month)%>% filter(Dest == "ATL") %>% summarise(mean = mean(ArrDelay, na.rm=T)) 
+rdata = data %>% mutate(MonthStr = month.abb[Month])
+ggplot(rdata, aes(Month))+geom_line(aes(y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For Atlanta")+scale_x_continuous(breaks=seq(1, 12, 1), limits=c(1,12))
 ```
 
 ### Graph6:
 ```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
 scale=0.1
 data = ABIA %>% group_by(Month) %>% filter(Dest == "LAX") %>%                            summarise(mean = mean(ArrDelay, na.rm=T))
-ggplot(data)+geom_line(aes(x=Month, y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For Log Angeles")
+rdata = data %>% mutate(MonthStr = month.abb[Month])
+ggplot(rdata, aes(Month))+geom_line(aes(y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For Los Angeles")+scale_x_continuous(breaks=seq(1, 12, 1), limits=c(1,12))
 ```
 
 ### Graph7:
 ```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
 scale=0.1
 data = ABIA %>% group_by(Month) %>% filter(Dest == "ORD") %>% summarise(mean = mean(ArrDelay, na.rm=T))
-ggplot(data)+geom_line(aes(x=Month, y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For Chicago")
+rdata = data %>% mutate(MonthStr = month.abb[Month])
+ggplot(rdata, aes(Month))+geom_line(aes(y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For Chicago")+scale_x_continuous(breaks=seq(1, 12, 1), limits=c(1,12))
 ```
 
 ### Graph8:
 ```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
 scale=0.1
 data = ABIA %>% group_by(Month) %>% filter(Dest == "DFW") %>% summarise(mean = mean(ArrDelay, na.rm=T))
-ggplot(data)+geom_line(aes(x=Month, y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For Dallas")
+rdata = data %>% mutate(MonthStr = month.abb[Month])
+ggplot(rdata, aes(Month))+geom_line(aes(y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For Dallas")+scale_x_continuous(breaks=seq(1, 12, 1), limits=c(1,12))
 ```
 
 ### Graph9:
 ```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
 scale=0.1
 data = ABIA %>% group_by(Month) %>% filter(Dest == "DEN") %>% summarise(mean = mean(ArrDelay, na.rm=T))
-ggplot(data)+geom_line(aes(x=Month, y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For Denver")
+rdata = data %>% mutate(MonthStr = month.abb[Month])
+ggplot(rdata, aes(Month))+geom_line(aes(y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For Denver")+scale_x_continuous(breaks=seq(1, 12, 1), limits=c(1,12))
 ```
 
 ### Graph10:
 ```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
 scale=0.1
 data = ABIA %>% group_by(Month) %>% filter(Dest == "JFK") %>% summarise(mean = mean(ArrDelay, na.rm=T))
-ggplot(data)+geom_line(aes(x=Month, y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For New York")
+rdata = data %>% mutate(MonthStr = month.abb[Month])
+ggplot(rdata, aes(Month))+geom_line(aes(y=mean))+ggtitle("Best Time Of Year To Fly To Minimize Delays For New York")+scale_x_continuous(breaks=seq(1, 12, 1), limits=c(1,12))
 ```
 
 ### Comments on Graphs 5 to 10:
