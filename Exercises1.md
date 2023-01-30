@@ -10,13 +10,9 @@ does this change by airline?**
 
 ### Graph1:
 
-    ## Warning: Removed 1 row(s) containing missing values (geom_path).
-
 <img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
 
 ### Graph2:
-
-    ## Warning: Removed 1 row(s) containing missing values (geom_path).
 
 <img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
 
@@ -41,13 +37,9 @@ more clear during the day till midnight.
 
 ### Graph3:
 
-    ## Warning: Removed 1 row(s) containing missing values (geom_path).
-
 <img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
 
 ### Graph 4:
-
-    ## Warning: Removed 1 row(s) containing missing values (geom_path).
 
 <img src="Exercises1_files/figure-markdown_strict/unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
