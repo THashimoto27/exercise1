@@ -3,7 +3,7 @@ title: "Exercise1"
 author: "Takehiro Hasimoto (UT EID - TH33985), Avijit Mallik (UT EID - AM99484), Arindam Chatterjee (UT EID - AC83995)"
 date: "`r Sys.Date()`"
 output:
-  pdf_document: default
+  md_document
 ---
 <!--   pdf_document: default
  md_document -->
@@ -50,7 +50,7 @@ sclass <- read.csv('sclass.csv')
 ```{r, echo=FALSE,fig.width =5, fig.height = 2,fig.align='center'}
 scale=0.1
 data = ABIA %>% group_by(ArrTime) %>% summarize(mean = mean(ArrDelay, na.rm=T))
-ggplot(data)+geom_line(aes(x = ArrTime, y = mean))+ggtitle("The mean of minutes of arrival delays by Arrival Time")
+suppressWarnings(ggplot(data)+geom_line(aes(x = ArrTime, y = mean))+ggtitle("The mean of minutes of arrival delays by Arrival Time"))
 ```
 
 ### Graph2:
